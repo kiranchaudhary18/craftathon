@@ -1,33 +1,44 @@
 import { useState } from 'react'
 import { Bell, Mail, Lock, Database, Shield, Eye, Save } from 'lucide-react'
 
-export default function AdminSettings() {
-  const [settings, setSettings] = useState({
-    emailNotifications: true,
-    smsNotifications: false,
-    pushNotifications: true,
-    weeklyReport: true,
-    systemAlerts: true,
-    maintenanceMode: false,
-    twoFactorAuth: true,
-    dataBackup: true,
-    autoLogout: true,
-    anonymizeData: false
-  })
+const initialSettings = {
+  emailNotifications: true,
+  smsNotifications: false,
+  pushNotifications: true,
+  weeklyReport: true,
+  systemAlerts: true,
+  maintenanceMode: false,
+  twoFactorAuth: true,
+  dataBackup: true,
+  autoLogout: true,
+  anonymizeData: false
+}
 
+export default function AdminSettings() {
+  const [settings, setSettings] = useState(initialSettings)
   const [saved, setSaved] = useState(false)
+  const [dirty, setDirty] = useState(false)
 
   const handleToggle = (key) => {
     setSettings(prev => ({
       ...prev,
       [key]: !prev[key]
     }))
+    setDirty(true)
     setSaved(false)
   }
 
   const handleSave = () => {
+    // In a real app, save to API here (PATCH/POST)
     setSaved(true)
+    setDirty(false)
     setTimeout(() => setSaved(false), 2000)
+  }
+
+  const handleCancel = () => {
+    setSettings(initialSettings)
+    setDirty(false)
+    setSaved(false)
   }
 
   const ToggleSwitch = ({ value, onChange }) => (
@@ -257,13 +268,18 @@ export default function AdminSettings() {
       </div>
 
       {/* Save Button */}
-      <div className="flex gap-3 justify-end sticky bottom-6">
-        <button className="px-6 py-3 border border-gray-200 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition">
+      <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 gap-3 rounded-xl bg-white/90 border border-gray-200 p-3 shadow-lg backdrop-blur md:right-6 md:left-auto">
+        <button
+          onClick={handleCancel}
+          className="px-6 py-3 border border-gray-200 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition disabled:text-gray-400 disabled:border-gray-200"
+          disabled={!dirty}
+        >
           Cancel
         </button>
         <button
           onClick={handleSave}
-          className="px-6 py-3 bg-[#6366F1] hover:bg-indigo-700 text-white rounded-lg font-medium transition flex items-center gap-2"
+          className={`px-6 py-3 rounded-lg font-medium transition flex items-center gap-2 ${dirty ? 'bg-[#6366F1] hover:bg-indigo-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
+          disabled={!dirty}
         >
           <Save size={16} />
           Save Changes

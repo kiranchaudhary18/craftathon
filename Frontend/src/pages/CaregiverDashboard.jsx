@@ -5,6 +5,13 @@ import { useAuth } from '../context/AuthContext'
 import { api } from '../services/api'
 import Notification from '../components/Notification'
 
+const statCardsTemplate = [
+  { id: 1, label: 'Total Patients', icon: Users, color: 'bg-blue-50', iconColor: 'text-[#1E3A5F]' },
+  { id: 2, label: 'Active Patients', icon: Heart, color: 'bg-teal-50', iconColor: 'text-[#14B8A6]' },
+  { id: 3, label: 'Critical Alerts', icon: AlertCircle, color: 'bg-red-50', iconColor: 'text-[#EF4444]' },
+  { id: 4, label: 'Avg Adherence', icon: TrendingUp, color: 'bg-amber-50', iconColor: 'text-[#F59E0B]' }
+]
+
 export default function CaregiverDashboard() {
   const { user } = useAuth()
   const [patients, setPatients] = useState([])
@@ -108,12 +115,13 @@ export default function CaregiverDashboard() {
     return 'text-[#EF4444]'
   }
 
-  const statCards = [
-    { label: 'Total Patients', value: stats.totalPatients.toString(), icon: Users, color: 'bg-blue-50', iconColor: 'text-[#1E3A5F]' },
-    { label: 'Active Patients', value: stats.activePatients.toString(), icon: Heart, color: 'bg-teal-50', iconColor: 'text-[#14B8A6]' },
-    { label: 'Critical Alerts', value: stats.criticalAlerts.toString(), icon: AlertCircle, color: 'bg-red-50', iconColor: 'text-[#EF4444]' },
-    { label: 'Avg Adherence', value: `${stats.avgAdherence}%`, icon: TrendingUp, color: 'bg-amber-50', iconColor: 'text-[#F59E0B]' }
-  ]
+  const statCards = statCardsTemplate.map(card => ({
+    ...card,
+    value: card.id === 1 ? stats.totalPatients.toString() :
+           card.id === 2 ? stats.activePatients.toString() :
+           card.id === 3 ? stats.criticalAlerts.toString() :
+           `${stats.avgAdherence}%`
+  }))
 
   if (loading) {
     return (
@@ -153,7 +161,7 @@ export default function CaregiverDashboard() {
         {statCards.map((stat) => {
           const Icon = stat.icon
           return (
-            <div key={stat.label} className={`${stat.color} rounded-xl p-6 border border-gray-100`}>
+            <div key={stat.id} className={`${stat.color} rounded-xl p-6 border border-gray-100`}>
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">{stat.label}</p>
