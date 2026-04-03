@@ -11,11 +11,12 @@ export default function Signup() {
   const [notification, setNotification] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
-  const { login } = useAuth()
+  const { register } = useAuth()
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
+    setNotification(null)
 
     if (!name || !email || !password) {
       setNotification({ message: 'Please fill all fields', type: 'error' })
@@ -23,28 +24,46 @@ export default function Signup() {
       return
     }
 
-    if (password.length < 6) {
-      setNotification({ message: 'Password must be at least 6 characters', type: 'error' })
+    if (password.length < 8) {
+      setNotification({ message: 'Password must be at least 8 characters', type: 'error' })
       setIsLoading(false)
       return
     }
 
-    setTimeout(() => {
-      const userData = { name, email, role }
-      login(userData)
-      setNotification({ message: 'Account created successfully', type: 'success' })
-      setIsLoading(false)
+    try {
+      // Split name into first and last
+      const nameParts = name.trim().split(' ')
+      const firstName = nameParts[0]
+      const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''
 
-      setTimeout(() => {
-        if (role === 'doctor') {
-          navigate('/caregiver/dashboard', { replace: true })
-        } else if (role === 'admin') {
-          navigate('/admin/dashboard', { replace: true })
-        } else {
-          navigate('/dashboard', { replace: true })
-        }
-      }, 1000)
-    }, 800)
+      const userData = {
+        email,
+        password,
+        firstName,
+        lastName,
+        role: role.toUpperCase()
+      }
+
+      const result = await register(userData)
+      
+      if (result.success) {
+        setNotification({ 
+          message: result.message || 'Account created successfully! Please verify your email.', 
+          type: 'success' 
+        })
+        
+        // Redirect to login after 2 seconds
+        setTimeout(() => {
+          navigate('/login')
+        }, 2000)
+      } else {
+        setNotification({ message: result.message || 'Registration failed', type: 'error' })
+      }
+    } catch (error) {
+      setNotification({ message: 'Network error. Please try again.', type: 'error' })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -113,10 +132,11 @@ export default function Signup() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                minLength={8}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2F5B8C] focus:border-transparent transition-all"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Minimum 6 characters
+                Minimum 8 characters (backend requirement)
               </p>
             </div>
 
