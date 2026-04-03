@@ -121,7 +121,7 @@ export default function Landing() {
                     <circle cx="75" cy="180" r="15" fill="#3E6FA3" />
                     <text x="100" y="185" fontSize="13" fontWeight="bold" fill="#2F5B8C">Aspirin</text>
                     <text x="100" y="203" fontSize="11" fill="#666">2x Daily</text>
-                    <circle cx="160" cy="245" r="20" fill="#22C55E" opacity="0.2" strokeWidth="3" stroke="#22C55E" fill="none" />
+                    <circle cx="160" cy="245" r="20" opacity="0.2" strokeWidth="3" stroke="#22C55E" fill="none" />
                     <text x="165" y="250" fontSize="12" fontWeight="bold" fill="#22C55E">Done</text>
                     
                     {/* Card 2 */}
@@ -129,7 +129,7 @@ export default function Landing() {
                     <circle cx="295" cy="180" r="15" fill="#3E6FA3" />
                     <text x="320" y="185" fontSize="13" fontWeight="bold" fill="#2F5B8C">Metformin</text>
                     <text x="320" y="203" fontSize="11" fill="#666">Morning</text>
-                    <circle cx="340" cy="245" r="20" fill="#F97316" opacity="0.3" strokeWidth="3" stroke="#F97316" fill="none" />
+                    <circle cx="340" cy="245" r="20" opacity="0.3" strokeWidth="3" stroke="#F97316" fill="none" />
                     <text x="335" y="250" fontSize="11" fontWeight="bold" fill="#F97316">Pending</text>
                     
                     {/* Progress Section */}
