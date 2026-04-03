@@ -20,8 +20,23 @@ const { notFound } = require("./middlewares/notFound");
 const app = express();
 
 // ─── Middlewares ─────────────────────────────────────────────────────────────
+// Configure CORS with proper origin handling
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'http://localhost:3173',
+    'https://craftathon.vercel.app',
+    'https://craftathon.onrender.com',
+].filter(Boolean);
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "*",
+    origin: function(origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
 }));
 

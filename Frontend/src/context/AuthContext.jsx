@@ -74,6 +74,11 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setUser(null)
       setIsAuthenticated(false)
+      localStorage.removeItem('user')
+      localStorage.removeItem('token')
+      localStorage.removeItem('refreshToken')
+      // Redirect to login page immediately
+      window.location.href = '/login'
     }
   }
 
