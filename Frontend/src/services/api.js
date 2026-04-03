@@ -78,8 +78,8 @@ class ApiService {
       const response = await fetch(url, config)
       const data = await response.json()
 
-      // Handle 401 Unauthorized - try to refresh token
-      if (response.status === 401) {
+      // Handle 401 Unauthorized - try to refresh token (only for authenticated requests)
+      if (response.status === 401 && includeAuth) {
         const refreshed = await this.refreshToken()
         if (refreshed) {
           // Retry original request
@@ -389,11 +389,11 @@ class ApiService {
   // ============ USER APIs ============
 
   async getUserProfile() {
-    return this.request('/users/me')
+    return this.request('/users/profile')
   }
 
   async updateUserProfile(profileData) {
-    return this.request('/users/me', {
+    return this.request('/users/profile', {
       method: 'PUT',
       body: profileData,
     })
