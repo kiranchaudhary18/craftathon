@@ -27,7 +27,7 @@ const register = async (req, res, next) => {
                 email,
                 passwordHash,
                 firstName,
-                lastName,
+                lastName: lastName || "",
                 phone,
                 role: role || "PATIENT",
                 emailVerifyToken,
@@ -36,6 +36,7 @@ const register = async (req, res, next) => {
             select: { id: true, email: true, firstName: true, lastName: true, role: true, createdAt: true },
         });
 
+<<<<<<< Updated upstream
         // Create empty streak for new user
         if (role === "PATIENT" || !role) {
             await prisma.streak.create({
@@ -46,6 +47,12 @@ const register = async (req, res, next) => {
                 },
             }).catch(() => {}); // Non-blocking
         }
+=======
+        // Create streak separately
+        await prisma.streak.create({
+            data: { userId: user.id }
+        }).catch(() => { }); // Ignore if it fails
+>>>>>>> Stashed changes
 
         // Send verification email (non-blocking)
         const verifyLink = `${process.env.FRONTEND_URL}/verify-email?token=${emailVerifyToken}`;
