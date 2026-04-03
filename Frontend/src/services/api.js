@@ -401,7 +401,7 @@ class ApiService {
 
   async changePassword(currentPassword, newPassword) {
     return this.request('/users/change-password', {
-      method: 'POST',
+      method: 'PUT',
       body: { currentPassword, newPassword },
     })
   }

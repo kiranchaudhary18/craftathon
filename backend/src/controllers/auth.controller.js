@@ -32,10 +32,20 @@ const register = async (req, res, next) => {
                 role: role || "PATIENT",
                 emailVerifyToken,
                 profile: { create: {} },
-                streak: { create: {} },
             },
             select: { id: true, email: true, firstName: true, lastName: true, role: true, createdAt: true },
         });
+
+        // Create empty streak for new user
+        if (role === "PATIENT" || !role) {
+            await prisma.streak.create({
+                data: {
+                    userId: user.id,
+                    currentStreak: 0,
+                    longestStreak: 0,
+                },
+            }).catch(() => {}); // Non-blocking
+        }
 
         // Send verification email (non-blocking)
         const verifyLink = `${process.env.FRONTEND_URL}/verify-email?token=${emailVerifyToken}`;

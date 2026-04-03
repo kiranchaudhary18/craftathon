@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { Users, AlertCircle, TrendingUp, Heart, Plus } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { api } from '../services/api'
-import DashboardLayout from '../components/DashboardLayout'
 import Notification from '../components/Notification'
 
 export default function CaregiverDashboard() {
@@ -118,16 +117,14 @@ export default function CaregiverDashboard() {
 
   if (loading) {
     return (
-      <DashboardLayout pageTitle="Caregiver Dashboard" pageSubtitle="Monitor and manage patient adherence">
-        <div className="flex items-center justify-center h-64">
-          <div className="w-12 h-12 border-4 border-[#1E3A5F] border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </DashboardLayout>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-12 h-12 border-4 border-[#1E3A5F] border-t-transparent rounded-full animate-spin"></div>
+      </div>
     )
   }
 
   return (
-    <DashboardLayout pageTitle="Caregiver Dashboard" pageSubtitle="Monitor and manage patient adherence">
+    <div className="space-y-8">
       {/* Error Message */}
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-6">
@@ -331,6 +328,6 @@ export default function CaregiverDashboard() {
           </div>
         </div>
       </div>
-    </DashboardLayout>
+    </div>
   )
 }

@@ -149,7 +149,7 @@ export default function AppRoutes() {
       <Route
         path="/caregiver"
         element={
-          <ProtectedRoute requiredRole="doctor">
+          <ProtectedRoute requiredRole="caregiver">
             <CaregiverLayout />
           </ProtectedRoute>
         }

@@ -32,10 +32,12 @@ export default function Login() {
         // Redirect based on role
         const userRole = result.user?.role?.toLowerCase() || role
         setTimeout(() => {
-          if (userRole === 'doctor' || userRole === 'caregiver') {
+          if (userRole === 'doctor') {
             navigate('/doctor-dashboard')
+          } else if (userRole === 'caregiver') {
+            navigate('/caregiver/dashboard')
           } else if (userRole === 'admin') {
-            navigate('/doctor-dashboard')
+            navigate('/admin/dashboard')
           } else {
             navigate('/dashboard')
           }
